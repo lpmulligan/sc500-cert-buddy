@@ -1,0 +1,40 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+*.code-workspace
+
+# Cert Buddy runtime artifacts (audit log is generated locally, not tracked)
+.cert-buddy/
+*.log
+
+# Node artifacts (only if a lab adds code)
+node_modules/
+
+# Python artifacts
+__pycache__/
+*.pyc
+.python-version
+.venv/
+
+# Environment and secrets
+.env
+.env.*
+*.key
+*.pem
+
+# NOTE: .claude/ and .mcp.json are intentionally tracked.
+# They ARE the project (subagents, commands, skills, hooks, MCP config),
+# so learners get the whole buddy on clone.
+
+# Keep the workspace MCP config tracked so Microsoft Learn grounding is turnkey
+# in VS Code. This overrides a global ignore of .vscode/ on the author's machine.
+!.vscode/
+.vscode/*
+!.vscode/mcp.json

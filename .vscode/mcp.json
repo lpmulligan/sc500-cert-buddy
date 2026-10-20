@@ -1,0 +1,9 @@
+{
+  "_comment": "VS Code workspace MCP config so the Microsoft Learn MCP server is turnkey in VS Code (GitHub Copilot Chat) as well as Claude Code. It travels with the repo. No API key, no sign-up.",
+  "servers": {
+    "mslearn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    }
+  }
+}

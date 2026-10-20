@@ -1,0 +1,8 @@
+{
+  "hooks": {
+    "SessionStart": [ { "hooks": [ { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.py\"" } ] } ],
+    "UserPromptSubmit": [ { "hooks": [ { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/prompt-context.py\"" } ] } ],
+    "PreToolUse": [ { "matcher": "Bash", "hooks": [ { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/policy-gate.py\"" } ] } ],
+    "PostToolUse": [ { "matcher": "mcp__mslearn__.*", "hooks": [ { "type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/citation-audit.py\"" } ] } ]
+  }
+}

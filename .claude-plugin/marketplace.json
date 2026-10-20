@@ -1,0 +1,20 @@
+{
+  "name": "lpmulligan-cert-buddies",
+  "owner": {
+    "name": "Lawrence Mulligan",
+    "email": "lmulligan@lpmnet.com"
+  },
+  "plugins": [
+    {
+      "name": "sc500-cert-buddy",
+      "description": "SC-500 study buddy for Claude Code: grounded questions, gradable security labs with license and cost gates, study plans, and a FastMCP server. Based on AI-901 Cert Buddy by Tim Warner.",
+      "source": {
+        "type": "github",
+        "owner": "lpmulligan",
+        "repo": "sc500-cert-buddy",
+        "path": "plugin/sc500-cert-buddy",
+        "ref": "main"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/mcp.json",
+  "_comment": "Project-level MCP servers for SC-500 Cert Buddy. These travel with the repo, so a clone is turnkey. mslearn is the free Microsoft Learn HTTP server (no key) that grounds all content. cert-buddy is the local FastMCP server in mcp-server/ that adds scoring, validation, progress, and quiz prompts. Create its virtual environment once so the local server can start: 'python3 -m venv mcp-server/.venv' then 'mcp-server/.venv/bin/pip install -r mcp-server/requirements.txt'. On Windows, use mcp-server\\.venv\\Scripts\\python.exe as the command.",
+  "mcpServers": {
+    "mslearn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
+    "cert-buddy": {
+      "type": "stdio",
+      "command": "mcp-server/.venv/bin/python3",
+      "args": ["mcp-server/cert_buddy_mcp.py"]
+    }
+  }
+}

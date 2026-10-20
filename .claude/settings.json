@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": "Project settings for SC-500 Cert Buddy. Four hook events make the buddy's promises deterministic; the project MCP servers are enabled by default; the Cert Coach output style sets the study-coach voice; least-privilege permissions keep the agent on rails. Hook commands use 'python3' (macOS and Linux). On Windows, change them to 'python' or 'py'.",
+  "enableAllProjectMcpServers": true,
+  "outputStyle": "Cert Coach",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "mcp__mslearn",
+      "mcp__cert-buddy"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git clean:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.py\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/prompt-context.py\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/policy-gate.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__mslearn__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/citation-audit.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

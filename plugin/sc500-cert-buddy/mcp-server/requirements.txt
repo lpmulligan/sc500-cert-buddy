@@ -1,0 +1,9 @@
+# cert-buddy-mcp dependencies
+# The MCP Python SDK (FastMCP lives in mcp.server.fastmcp).
+# Capped below 2.0: mcp 2.x renamed FastMCP to MCPServer and the server imports
+# the 1.x API. Lift the cap only after porting cert_buddy_mcp.py to 2.x.
+mcp>=1.28.0,<2
+
+# Optional: only needed for the generate_item tool, which calls Claude.
+# The server runs without it; generate_item degrades to a clear message.
+anthropic>=0.111.0

@@ -1,0 +1,20 @@
+{
+  "name": "sc500-cert-buddy",
+  "version": "1.0.0",
+  "description": "SC-500 (Microsoft Cloud and AI Security Engineer Associate) study buddy for Claude Code: grounded practice questions, gradable security labs with license and cost gates, and study plans, with a FastMCP server (tools, resources, prompts), Microsoft Learn MCP grounding, and deterministic hook guardrails. Based on AI-901 Cert Buddy by Tim Warner.",
+  "author": "Lawrence Mulligan <lmulligan@lpmnet.com>",
+  "homepage": "https://github.com/lpmulligan/sc500-cert-buddy",
+  "license": "MIT",
+  "keywords": [
+    "sc-500",
+    "azure",
+    "security",
+    "cloud-security",
+    "ai-security",
+    "certification",
+    "microsoft-learn",
+    "mcp",
+    "study-buddy",
+    "claude-code"
+  ]
+}
