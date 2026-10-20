@@ -27,8 +27,9 @@ This server is the interaction and scoring layer. The source of truth for SC-500
 
 ```bash
 cd mcp-server
-python3 -m pip install -r requirements.txt
-python3 cert_buddy_mcp.py
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python3 cert_buddy_mcp.py
 ```
 
 To enable the optional `generate_item` tool, set a key first:

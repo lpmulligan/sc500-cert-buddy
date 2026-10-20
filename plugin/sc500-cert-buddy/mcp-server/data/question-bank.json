@@ -1,1 +1,277 @@
-[]
+[
+  {
+    "id": 1,
+    "domain": "identity",
+    "objective": "1.2.3 Configure access to Key Vault",
+    "stem": "Tailspin Toys has an Azure key vault named KV1 that uses the Azure role-based access control (RBAC) permission model. An Azure App Service app named App1 has a system-assigned managed identity. App1 needs to read secret values from KV1. You need to grant App1 access by following the principle of least privilege. Which role should you assign to the managed identity of App1?",
+    "choices": {
+      "A": "Key Vault Reader",
+      "B": "Key Vault Secrets User",
+      "C": "Key Vault Secrets Officer",
+      "D": "Key Vault Contributor"
+    },
+    "answer": "B",
+    "rationale": {
+      "A": "Key Vault Reader reads the metadata of a vault and its objects, but it does not read secret values. It is a common trap because the role name suggests read access to secrets.",
+      "B": "Key Vault Secrets User reads secret contents, so it is the least-privileged data plane role for an app that only retrieves secrets. Assign it at the vault scope, or at the scope of an individual secret, to grant only what App1 needs.",
+      "C": "Key Vault Secrets Officer performs every action on secrets except managing permissions, including creating and deleting secrets. It grants more than App1 needs, which violates the principle of least privilege.",
+      "D": "Key Vault Contributor manages key vaults through the control plane and does not grant data plane access to secret values. Use it for administrators who manage vault configuration, not for apps that read secrets."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/key-vault/general/rbac-guide",
+      "https://learn.microsoft.com/azure/key-vault/general/secure-key-vault"
+    ]
+  },
+  {
+    "id": 2,
+    "domain": "identity",
+    "objective": "1.3.4 Implement resource locks",
+    "stem": "Woodgrove Bank has a resource group named RG1 that contains production storage accounts. Administrators report that a storage account in RG1 was deleted by mistake. You need to prevent the deletion of resources in RG1. Administrators need to continue to modify the settings of resources in RG1. What should you configure for RG1?",
+    "choices": {
+      "A": "a ReadOnly resource lock",
+      "B": "a Storage Account Contributor role assignment for the administrators",
+      "C": "a Reader role assignment for the administrators",
+      "D": "a CanNotDelete resource lock"
+    },
+    "answer": "D",
+    "rationale": {
+      "A": "A ReadOnly lock prevents deletion, but it also prevents updates, so administrators lose the ability to modify resource settings. Applying it is similar to restricting every authorized user to the permissions of the Reader role.",
+      "B": "Storage Account Contributor grants permission to manage storage accounts, including deleting them. A role assignment grants access, so it does not stop an authorized administrator from deleting a resource.",
+      "C": "The Reader role prevents administrators from deleting resources, but it also prevents them from modifying settings. It fails the requirement that administrators continue to modify resources in RG1.",
+      "D": "A CanNotDelete lock lets authorized users read and modify a resource while blocking its deletion, and the lock overrides user permissions. Resources in RG1 inherit a lock that is applied at the resource group scope, including resources that are added later."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/azure-resource-manager/management/lock-resources",
+      "https://learn.microsoft.com/azure/storage/common/lock-account-resource"
+    ]
+  },
+  {
+    "id": 3,
+    "domain": "identity",
+    "objective": "1.1.2 Implement conditional access policies",
+    "stem": "Litware, Inc. plans to deploy a new Microsoft Entra Conditional Access policy that requires multifactor authentication (MFA) for users who access a cloud app named App1. You need to evaluate the impact of the policy on user sign-ins before users receive MFA prompts from the policy. Which action should you perform?",
+    "choices": {
+      "A": "Create the policy in Report-only mode, and then review the sign-in logs.",
+      "B": "Create the policy in the On state, and then assign the policy to a pilot group.",
+      "C": "Create the policy in the Off state, and then review the sign-in logs.",
+      "D": "Enable security defaults for the Microsoft Entra tenant."
+    },
+    "answer": "A",
+    "rationale": {
+      "A": "Report-only mode evaluates the policy during sign-in without enforcing grant controls, and it logs the results in the Conditional Access and Report-only tabs of the sign-in logs. Users are not prompted for MFA by the policy, so you can review its impact before you switch it to On.",
+      "B": "A policy in the On state is enforced, so users in the pilot group receive MFA prompts immediately. A pilot limits the blast radius, but it does not meet the requirement to evaluate impact before users are prompted.",
+      "C": "A policy in the Off state is not evaluated during sign-in, so the sign-in logs record no results for it. The Off state is useful for staging a policy, not for measuring its impact.",
+      "D": "Security defaults enforce baseline MFA across the tenant and are not scoped to App1. Enabling them changes sign-in behavior immediately instead of measuring the impact of the planned policy."
+    },
+    "references": [
+      "https://learn.microsoft.com/entra/identity/conditional-access/concept-conditional-access-report-only"
+    ]
+  },
+  {
+    "id": 4,
+    "domain": "storage-network",
+    "objective": "2.1.1 Implement and configure security for storage accounts",
+    "stem": "Contoso Pharmaceuticals has a storage account named storage1. A security audit reports that applications authorize requests to storage1 by using the storage account access keys. You need to ensure that storage1 accepts requests that are authorized by Microsoft Entra ID and rejects requests that are authorized by the account access keys. What should you configure for storage1?",
+    "choices": {
+      "A": "rotate both storage account access keys",
+      "B": "set the minimum TLS version to 1.2",
+      "C": "set the AllowSharedKeyAccess property to false",
+      "D": "create a stored access policy on each container"
+    },
+    "answer": "C",
+    "rationale": {
+      "A": "Rotating the keys invalidates the old keys, but Shared Key authorization remains enabled with the new keys. Rotation limits the exposure from a leaked key; it does not enforce Microsoft Entra authorization.",
+      "B": "The minimum TLS version controls the transport protocol that clients use to connect to storage1. It does not change which authorization methods storage1 accepts.",
+      "C": "When AllowSharedKeyAccess is false, Azure Storage rejects requests that are authorized with the account access keys and accepts requests that are authorized by Microsoft Entra ID. Migrate clients to Microsoft Entra ID first, because Shared Key requests fail with error 403 after the change.",
+      "D": "A stored access policy controls the service shared access signatures for a container, and those signatures are signed with the account key. It does not block Shared Key authorization for the storage account."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/storage/common/shared-key-authorization-prevent",
+      "https://learn.microsoft.com/azure/storage/common/secure-storage"
+    ]
+  },
+  {
+    "id": 5,
+    "domain": "storage-network",
+    "objective": "2.3.2 Implement and configure network access policies by using Azure Virtual Network Manager",
+    "stem": "Fabrikam, Inc. has 60 virtual networks across three Azure subscriptions. Application teams manage the network security groups (NSGs) for their own subnets. You need to block inbound TCP port 3389 to the virtual networks. You need to ensure that application teams are unable to override the block by adding NSG rules. What should you use?",
+    "choices": {
+      "A": "an Azure Policy definition that audits NSG rules for port 3389",
+      "B": "an Azure Virtual Network Manager security admin rule that uses the Deny action",
+      "C": "an application security group that contains the virtual machines",
+      "D": "an Azure Virtual Network Manager security admin rule that uses the Allow action"
+    },
+    "answer": "B",
+    "rationale": {
+      "A": "The Audit effect reports noncompliant NSG rules, but it does not block traffic. Application teams can still add an allow rule, and traffic flows until someone remediates the rule.",
+      "B": "Security admin rules are evaluated before NSG rules, and a Deny security admin rule terminates traffic evaluation, so no NSG rule can allow the traffic. Deploy the rule in a security admin configuration to a network group that contains the 60 virtual networks.",
+      "C": "An application security group groups virtual machines so that NSG rules can reference them as a source or destination. It enforces nothing by itself, and the application teams still control the NSG rules that reference it.",
+      "D": "An Allow security admin rule passes traffic on to NSG evaluation, so the NSG rules still decide the outcome. It does not block port 3389 and does not stop teams from allowing it."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/virtual-network-manager/concept-security-admins",
+      "https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview"
+    ]
+  },
+  {
+    "id": 6,
+    "domain": "storage-network",
+    "objective": "2.3.9 Evaluate effective security rules by using Azure Network Watcher diagnostics",
+    "stem": "Relecloud has a virtual machine named VM1 that has network security groups (NSGs) associated with both its subnet and its network interface. Users report that they are unable to connect to VM1 on TCP port 443 from the IP address 203.0.113.25. You need to identify the security rule that blocks the traffic. Which Azure Network Watcher tool should you use?",
+    "choices": {
+      "A": "Next hop",
+      "B": "Packet capture",
+      "C": "VPN troubleshoot",
+      "D": "IP flow verify"
+    },
+    "answer": "D",
+    "rationale": {
+      "A": "Next hop identifies the next hop type and IP address for traffic from VM1 to a destination. Use it to diagnose routing problems, not traffic filtering by security rules.",
+      "B": "Packet capture records the traffic to and from VM1 for later analysis. It shows which packets arrive, but it does not name the security rule that denies them.",
+      "C": "VPN troubleshoot diagnoses problems with VPN gateways and VPN connections. The traffic from 203.0.113.25 to VM1 is not described as crossing a VPN connection.",
+      "D": "IP flow verify tests a flow by using the direction, protocol, local and remote IP addresses, and ports, and it returns whether access is allowed or denied along with the name of the rule. It evaluates the NSGs on both the subnet and the network interface, plus any Azure Virtual Network Manager admin rules."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/network-watcher/ip-flow-verify-overview",
+      "https://learn.microsoft.com/azure/network-watcher/network-watcher-overview"
+    ]
+  },
+  {
+    "id": 7,
+    "domain": "compute",
+    "objective": "3.2.3 Enable and enforce use of just-in-time (JIT) VM access",
+    "stem": "Alpine Ski House has an Azure subscription named Sub1 that contains 20 Windows virtual machines. Administrators connect to the virtual machines by using RDP. Microsoft Defender for Cloud uses the free Foundational CSPM plan for Sub1, and no other Defender plans are enabled. You need to configure just-in-time (JIT) VM access for the virtual machines. Which action should you perform first?",
+    "choices": {
+      "A": "Deploy Azure Bastion to the virtual network.",
+      "B": "Enable the Defender CSPM plan for Sub1.",
+      "C": "Enable Defender for Servers Plan 2 for Sub1.",
+      "D": "Enable Defender for Servers Plan 1 for Sub1."
+    },
+    "answer": "C",
+    "rationale": {
+      "A": "Azure Bastion provides RDP and SSH connectivity without public IP addresses on the virtual machines, and it works well alongside JIT VM access. It is not a prerequisite for JIT VM access.",
+      "B": "Defender CSPM adds advanced posture features such as attack path analysis and agentless scanning. JIT VM access is a Defender for Servers feature, not a Defender CSPM feature.",
+      "C": "JIT VM access is included in Defender for Servers Plan 2, so you must enable that plan on Sub1 before you configure JIT policies. Plan 2 is enabled at the subscription level and starts a 30-day free trial.",
+      "D": "Defender for Servers Plan 1 provides capabilities such as the Microsoft Defender for Endpoint integration, but it does not include JIT VM access. Choosing Plan 1 is a common mistake when the requirement depends on a Plan 2 feature."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/defender-for-cloud/enable-just-in-time-access",
+      "https://learn.microsoft.com/azure/defender-for-cloud/defender-for-servers-overview"
+    ]
+  },
+  {
+    "id": 8,
+    "domain": "compute",
+    "objective": "3.2.2 Plan and implement Azure Bastion",
+    "stem": "Northwind Traders has a virtual network named VNet1 that contains virtual machines. You plan to deploy Azure Bastion by using the Standard SKU so that administrators connect to the virtual machines without public IP addresses. You need to prepare VNet1 for the deployment. Which subnet should you create in VNet1?",
+    "choices": {
+      "A": "a subnet named AzureBastionSubnet that has a /26 prefix",
+      "B": "a subnet named BastionSubnet that has a /26 prefix",
+      "C": "a subnet named AzureBastionSubnet that has a /27 prefix",
+      "D": "a subnet named GatewaySubnet that has a /27 prefix"
+    },
+    "answer": "A",
+    "rationale": {
+      "A": "Azure Bastion requires a dedicated subnet named AzureBastionSubnet that is /26 or larger and is in the same virtual network as the bastion host. The subnet cannot contain other resources.",
+      "B": "The subnet name is wrong, because Azure Bastion deploys into a subnet named exactly AzureBastionSubnet. The deployment fails with any other name, even when the size is correct.",
+      "C": "The subnet name is correct, but a /27 prefix is smaller than the /26 minimum for Bastion hosts deployed after November 2, 2021. The deployment fails because the subnet is too small.",
+      "D": "GatewaySubnet is the subnet that VPN gateways and ExpressRoute gateways use. Azure Bastion cannot deploy into it."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/bastion/configuration-settings",
+      "https://learn.microsoft.com/azure/bastion/bastion-faq"
+    ]
+  },
+  {
+    "id": 9,
+    "domain": "compute",
+    "objective": "3.1.8 Enable Defender for AI Service in Cloud Workload Protection in Defender for Cloud",
+    "stem": "Trey Research has a Microsoft Foundry resource that hosts Azure OpenAI model deployments for a customer-facing chat app named App1. The security team wants alerts in Microsoft Defender for Cloud when users attempt jailbreak attacks against App1. What should you enable in Defender for Cloud for the subscription?",
+    "choices": {
+      "A": "the Defender CSPM plan",
+      "B": "the AI services threat protection plan",
+      "C": "the Defender for App Service plan",
+      "D": "the Defender for Key Vault plan"
+    },
+    "answer": "B",
+    "rationale": {
+      "A": "Defender CSPM provides AI security posture management, such as discovering AI workloads and analyzing attack paths. It does not generate runtime alerts for jailbreak attempts.",
+      "B": "Threat protection for AI services works with Azure AI Content Safety Prompt Shields and Microsoft threat intelligence to raise security alerts for threats such as jailbreak attempts and data leakage. You enable it by setting AI services to On in the Defender plans for the subscription.",
+      "C": "Defender for App Service detects attacks against applications that run in Azure App Service. It does not inspect the prompts that users send to model deployments.",
+      "D": "Defender for Key Vault detects unusual and potentially harmful attempts to access key vaults. It is not designed to detect prompt-based attacks against AI models."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/defender-for-cloud/ai-threat-protection",
+      "https://learn.microsoft.com/azure/defender-for-cloud/ai-onboarding"
+    ]
+  },
+  {
+    "id": 10,
+    "domain": "posture",
+    "objective": "4.2.5 Implement and configure syslog and Common Event Format (CEF) event collections",
+    "stem": "Proseware, Inc. uses Microsoft Sentinel. A firewall appliance sends logs in Common Event Format (CEF) to a Linux log forwarder that runs the Azure Monitor Agent. You configure the Common Event Format (CEF) via AMA data connector. You need to query the firewall events in the workspace. Which table should you query?",
+    "choices": {
+      "A": "Syslog",
+      "B": "SecurityEvent",
+      "C": "AzureDiagnostics",
+      "D": "CommonSecurityLog"
+    },
+    "answer": "D",
+    "rationale": {
+      "A": "The Syslog table stores plain Syslog messages that the Syslog via AMA connector collects. CEF messages from the CEF via AMA connector land in a different table, and using the same facility for both formats can duplicate data.",
+      "B": "The SecurityEvent table stores Windows Security events that are collected from Windows machines. It does not receive CEF messages from a Linux log forwarder.",
+      "C": "The AzureDiagnostics table stores resource logs that Azure services send through diagnostic settings. The firewall appliance sends CEF messages through a log forwarder, not through diagnostic settings.",
+      "D": "CEF messages that the CEF via AMA connector ingests land in the CommonSecurityLog table. The standard CEF fields map to columns in that table, so you can query the firewall events directly."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/sentinel/cef-syslog-ama-overview",
+      "https://learn.microsoft.com/azure/sentinel/connect-cef-syslog-ama"
+    ]
+  },
+  {
+    "id": 11,
+    "domain": "posture",
+    "objective": "4.2.8 Implement automation rules and playbooks in Microsoft Sentinel",
+    "stem": "Humongous Insurance uses Microsoft Sentinel. You create a playbook named Playbook1 that opens a ticket in an IT service management system. You need Playbook1 to run automatically each time Microsoft Sentinel creates an incident. What should you create?",
+    "choices": {
+      "A": "a workbook",
+      "B": "a data collection rule",
+      "C": "an automation rule",
+      "D": "a scheduled analytics rule"
+    },
+    "answer": "C",
+    "rationale": {
+      "A": "A workbook visualizes data in interactive reports. It does not trigger actions when incidents are created.",
+      "B": "A data collection rule defines which data the Azure Monitor Agent collects and how that data is transformed. It controls ingestion, not incident response.",
+      "C": "An automation rule that uses the When incident is created trigger and a Run playbook action runs Playbook1 for each new incident. Microsoft Sentinel also needs permissions on the resource group that contains Playbook1.",
+      "D": "A scheduled analytics rule detects threats and generates alerts and incidents. Calling playbooks directly from analytics rules is a deprecated method, and Microsoft recommends automation rules instead."
+    },
+    "references": [
+      "https://learn.microsoft.com/azure/sentinel/automation/run-playbooks",
+      "https://learn.microsoft.com/azure/sentinel/automate-incident-handling-with-automation-rules"
+    ]
+  },
+  {
+    "id": 12,
+    "domain": "posture",
+    "objective": "4.3.1 Configure workspaces for Security Copilot",
+    "stem": "Wide World Importers plans to use Microsoft Security Copilot. The company has no Microsoft 365 E5 or E7 licenses. You need to make Security Copilot available to the security operations team. Which action should you perform first?",
+    "choices": {
+      "A": "Provision Security Compute Units (SCUs) in an Azure subscription.",
+      "B": "Assign the Security Administrator role to the security operations team.",
+      "C": "Enable the Defender CSPM plan for the Azure subscription.",
+      "D": "Create a Log Analytics workspace for Security Copilot."
+    },
+    "answer": "A",
+    "rationale": {
+      "A": "Customers who are not included through Microsoft 365 E5 or E7 must provision at least one SCU, either in Security Copilot or through Azure, before anyone can use Security Copilot. Provisioned SCUs are billed in hourly blocks, so start small and monitor usage.",
+      "B": "Roles control who can use Security Copilot, but without provisioned capacity there is nothing for the team to access. Assign roles after the capacity exists.",
+      "C": "Defender CSPM is a posture management plan in Defender for Cloud, and it does not provide Security Copilot capacity. Security Copilot is priced by SCUs.",
+      "D": "Security Copilot needs an Azure subscription and Microsoft Entra ID, but it has no other product prerequisites such as a Log Analytics workspace. Workspaces in Security Copilot are a separate concept from Log Analytics workspaces."
+    },
+    "references": [
+      "https://learn.microsoft.com/copilot/security/manual-onboarding",
+      "https://learn.microsoft.com/copilot/security/faq-security-copilot"
+    ]
+  }
+]

@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -133,21 +134,31 @@ def validate_item(item: dict[str, Any]) -> dict[str, Any]:
     Returns a STRUCTURED list of issues rather than prose, so an agentic loop
     can read the issues and repair the item. An empty issues list means valid.
     This is the structured-error pattern the repair step depends on.
+
+    Stems are scenario-first, so the WWL question-sentence rules apply to the
+    final sentence only. "do" is banned as an auxiliary ("Which service do you
+    use?") but allowed as the main verb ("What should you do?").
     """
     issues: list[str] = []
-    stem = str(item.get("stem", ""))
+    stem = str(item.get("stem", "")).strip()
     choices = item.get("choices", {})
     if not isinstance(choices, dict) or set(choices) != {"A", "B", "C", "D"}:
         issues.append("Item must have exactly four choices keyed A, B, C, D.")
     if item.get("answer") not in {"A", "B", "C", "D"}:
         issues.append("answer must be one of A, B, C, D.")
-    if not stem.strip().endswith("?"):
+    if not stem.endswith("?"):
         issues.append("Stem must be a question ending in '?'.")
-    if not (stem.lstrip().startswith("What") or stem.lstrip().startswith("Which")):
-        issues.append("Question must begin with 'What' or 'Which' (WWL).")
-    for banned in (" can ", " must ", " may ", " would ", " do "):
-        if banned in f" {stem.lower()} ":
-            issues.append(f"Question uses banned auxiliary '{banned.strip()}'; use 'should' (WWL).")
+    # Final sentence: the text after the last sentence-ending punctuation.
+    question = re.split(r"(?<=[.?!])\s+", stem)[-1] if stem else ""
+    if not re.match(r"(What|Which)\b", question):
+        issues.append("Question sentence must begin with 'What' or 'Which' (WWL).")
+    if not re.search(r"\bshould\b", question, re.IGNORECASE):
+        issues.append("Question sentence must use 'should' as the auxiliary (WWL).")
+    for banned in ("can", "must", "might", "may", "would"):
+        if re.search(rf"\b{banned}\b", question, re.IGNORECASE):
+            issues.append(f"Question uses banned auxiliary '{banned}'; use 'should' (WWL).")
+    if re.search(r"\b(do|does|did)\s+(you|we|they|i|the|a|an)\b", question, re.IGNORECASE):
+        issues.append("Question uses 'do' as an auxiliary; use 'should' (WWL).")
     rationale = item.get("rationale", {})
     if isinstance(choices, dict) and set(rationale) != set(choices):
         issues.append("Provide a rationale for every choice.")
