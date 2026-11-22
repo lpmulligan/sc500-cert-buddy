@@ -1,0 +1,20 @@
+{
+  "lab_id": "1-1-2-conditional-access-report-only",
+  "objective": "1.1.2 Implement conditional access policies",
+  "domain": "identity",
+  "total_points": 100,
+  "checks": [
+    { "id": "builtin_strength_count",          "description": "Number of built-in authentication strengths",                                   "expected": "3",                                  "points": 5 },
+    { "id": "named_location_trusted",          "description": "MainOffice1 isTrusted value",                                                   "expected": "True",                               "points": 10, "requires_license": true },
+    { "id": "auth_strength_combinations",      "description": "Number of allowed combinations in AuthStrength1",                               "expected": "2",                                  "points": 10, "requires_license": true },
+    { "id": "policy_state",                    "description": "Graph state value of CAPolicy1 in report-only mode",                            "expected": "enabledForReportingButNotEnforced",  "points": 10, "requires_license": true },
+    { "id": "policy_exclude_location",         "description": "Excluded location value on CAPolicy1",                                          "expected": "AllTrusted",                         "points": 10, "requires_license": true },
+    { "id": "whatif_applies_outside",          "description": "What If shows CAPolicy1 applies from 198.51.100.10",                            "expected": "yes",                                "points": 10, "requires_license": true },
+    { "id": "whatif_applies_inside",           "description": "What If shows CAPolicy1 applies from 203.0.113.10 (inside MainOffice1)",        "expected": "no",                                 "points": 5,  "requires_license": true },
+    { "id": "user1_prompted",                  "description": "User1 was prompted for a phishing-resistant method while the policy was report-only", "expected": "no",                           "points": 10, "requires_license": true },
+    { "id": "result_after_trusted",            "description": "CAPolicy1 report-only result after the real IP was added to MainOffice1",       "expected": "Report-only: Not applied",           "points": 10, "requires_license": true },
+    { "id": "authenticator_not_in_strength",   "description": "Built-in strength that Microsoft Authenticator (phone sign-in) does not satisfy", "expected": "Phishing-resistant MFA strength",   "points": 10 },
+    { "id": "trusted_location_delete_allowed", "description": "A trusted named location can be deleted while still marked trusted",            "expected": "no",                                 "points": 5 },
+    { "id": "cleanup_done",                    "description": "CAPolicy1, AuthStrength1, and MainOffice1 deleted; security defaults restored",  "expected": "yes",                                "points": 5,  "requires_license": true }
+  ]
+}

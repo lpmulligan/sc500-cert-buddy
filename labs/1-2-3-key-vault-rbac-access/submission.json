@@ -1,0 +1,10 @@
+{
+  "rbac_enabled": "0",
+  "owner_denied_action": "Microsoft.KeyVault/vaults/secrets/readMetadata/action",
+  "kv_contributor_data_actions": "0",
+  "secret1_enabled": "true",
+  "secrets_user_can_read": "yes",
+  "secrets_user_denied_action": "Microsoft.KeyVault/vaults/secrets/setSecret/action",
+  "rg1_deleted": "yes",
+  "kv1_soft_deleted_count": "0"
+}

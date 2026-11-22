@@ -1,0 +1,18 @@
+{
+  "lab_id": "1-2-4-key-vault-firewall",
+  "objective": "1.2.4 Configure firewall settings on Key Vault",
+  "domain": "identity",
+  "total_points": 100,
+  "checks": [
+    { "id": "default_action",            "description": "KV1 network ACL default action after the firewall is turned on",          "expected": "Deny",                "points": 10 },
+    { "id": "bypass",                    "description": "KV1 network ACL bypass setting for trusted Microsoft services",           "expected": "AzureServices",       "points": 10 },
+    { "id": "firewall_error_code",       "description": "Key Vault error code for a data plane call from a non-allowed address",    "expected": "ForbiddenByFirewall", "points": 15 },
+    { "id": "control_plane_still_works", "description": "az keyvault show succeeds while the firewall blocks the data plane",       "expected": "yes",                 "points": 10 },
+    { "id": "ip_rule_count",             "description": "Number of IP rules on KV1 after the private range attempt",               "expected": "1",                   "points": 10 },
+    { "id": "secret_read_after_ip_rule", "description": "Secret1 can be read after the public IP rule is added",                   "expected": "yes",                 "points": 15 },
+    { "id": "private_range_rejected",    "description": "The RFC 1918 range 10.0.0.0/24 is rejected as an IP rule",                "expected": "yes",                 "points": 10 },
+    { "id": "public_network_access",     "description": "KV1 publicNetworkAccess value after public access is disabled",           "expected": "Disabled",            "points": 10 },
+    { "id": "rg1_deleted",               "description": "RG1 no longer exists",                                                    "expected": "yes",                 "points": 5 },
+    { "id": "kv1_soft_deleted_count",    "description": "Number of soft-deleted vaults named KV1 after purge",                     "expected": "0",                   "points": 5 }
+  ]
+}

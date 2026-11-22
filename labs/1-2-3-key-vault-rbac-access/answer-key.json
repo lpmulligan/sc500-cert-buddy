@@ -1,0 +1,16 @@
+{
+  "lab_id": "1-2-3-key-vault-rbac-access",
+  "objective": "1.2.3 Configure access to Key Vault",
+  "domain": "identity",
+  "total_points": 100,
+  "checks": [
+    { "id": "rbac_enabled",                "description": "KV1 uses the Azure RBAC permission model (enableRbacAuthorization)",              "expected": "true",                                                 "points": 10 },
+    { "id": "owner_denied_action",         "description": "Data action denied to the Owner when listing secrets in KV1",                     "expected": "Microsoft.KeyVault/vaults/secrets/readMetadata/action", "points": 15 },
+    { "id": "kv_contributor_data_actions", "description": "Number of data actions in the Key Vault Contributor built-in role",                "expected": "0",                                                    "points": 10 },
+    { "id": "secret1_enabled",             "description": "Secret1 was created with Key Vault Secrets Officer and is enabled",               "expected": "true",                                                 "points": 10 },
+    { "id": "secrets_user_can_read",       "description": "Key Vault Secrets User can read the value of Secret1",                            "expected": "yes",                                                  "points": 15 },
+    { "id": "secrets_user_denied_action",  "description": "Data action denied to Key Vault Secrets User when changing Secret1",               "expected": "Microsoft.KeyVault/vaults/secrets/setSecret/action",    "points": 20 },
+    { "id": "rg1_deleted",                 "description": "RG1 no longer exists",                                                            "expected": "yes",                                                  "points": 10 },
+    { "id": "kv1_soft_deleted_count",      "description": "Number of soft-deleted vaults named KV1 after purge",                             "expected": "0",                                                    "points": 10 }
+  ]
+}

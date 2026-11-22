@@ -1,0 +1,16 @@
+{
+  "lab_id": "1-2-7-defender-for-key-vault",
+  "objective": "1.2.7 Implement Defender for Key Vault",
+  "domain": "identity",
+  "total_points": 100,
+  "checks": [
+    { "id": "plan_name_cli",            "description": "Defender for Cloud pricing name for the Key Vault plan",                      "expected": "KeyVaults",          "points": 10 },
+    { "id": "plan_tier_enabled",        "description": "Pricing tier of the KeyVaults plan after it is turned on",                   "expected": "Standard",           "points": 20, "requires_license": true },
+    { "id": "tor_alert_type",           "description": "Alert type ID for Access from a TOR exit node to a key vault",               "expected": "KV_TORAccess",       "points": 10 },
+    { "id": "tor_alert_severity",       "description": "Severity of Access from a TOR exit node to a key vault",                     "expected": "Medium",             "points": 10 },
+    { "id": "sample_alerts_created",    "description": "Key Vault sample alerts appear on the Security alerts page",                 "expected": "yes",                "points": 20, "requires_license": true },
+    { "id": "unknown_ip_first_control", "description": "Control to enable first when the alert source is an unrecognized IP address", "expected": "Key Vault firewall", "points": 10 },
+    { "id": "accessed_secrets_action",  "description": "Action to take on every secret, key, and certificate the caller accessed",   "expected": "rotate",             "points": 10 },
+    { "id": "plan_tier_after_cleanup",  "description": "Pricing tier of the KeyVaults plan after cleanup (dedicated lab subscription)", "expected": "Free",            "points": 10 }
+  ]
+}
